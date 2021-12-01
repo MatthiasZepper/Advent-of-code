@@ -203,7 +203,7 @@ summary(depths)</code></pre>
 ##     as.Date, as.Date.numeric</code></pre>
 <pre class="r"><code>sum(diff(rollapply(depths,3,mean))&gt;0)</code></pre>
 <pre><code>## [1] 1645</code></pre>
-<p>To solve the same task will a rolling window, the depth observations can be wrapped into a <a href="https://www.rdocumentation.org/packages/zoo/versions/1.8-9/topics/rollapply"><code>rollapply</code></a> window from the <code>zoo</code> package. In the simplest case this is an integer specifying the window width (in numbers of observations) which is aligned to the original sample according to the align argument.</p>
+<p>To solve the same task with a rolling window, the depth observations can be wrapped into a <a href="https://www.rdocumentation.org/packages/zoo/versions/1.8-9/topics/rollapply"><code>rollapply</code></a> window from the <code>zoo</code> package. In the simplest case this is an integer specifying the window width (in numbers of observations) which is aligned to the original sample according to the align argument.</p>
 <p>So for my data, 1645 observations increased within a rolling window.</p>
 </div>
 

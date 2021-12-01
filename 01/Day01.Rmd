@@ -3,8 +3,8 @@ title: "Advent of Code 2021 - Day 1"
 author: "Matthias Zepper"
 date: "12/1/2021"
 output:
-  html_document: default
   pdf_document: default
+  html_document: default
 ---
 
 ```{r setup, include=FALSE}
@@ -47,6 +47,6 @@ library("zoo")
 sum(diff(rollapply(depths,3,mean))>0)
 ```
 
-To solve the same task will a rolling window, the depth observations can be wrapped into a [`rollapply`](https://www.rdocumentation.org/packages/zoo/versions/1.8-9/topics/rollapply) window from the `zoo` package. In the simplest case this is an integer specifying the window width (in numbers of observations) which is aligned to the original sample according to the align argument.
+To solve the same task with a rolling window, the depth observations can be wrapped into a [`rollapply`](https://www.rdocumentation.org/packages/zoo/versions/1.8-9/topics/rollapply) window from the `zoo` package. In the simplest case this is an integer specifying the window width (in numbers of observations) which is aligned to the original sample according to the align argument.
 
 So for my data, 1645 observations increased within a rolling window. 
