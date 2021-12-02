@@ -1,0 +1,85 @@
+---
+title: "Advent of Code 2021 - Day 2"
+author: "Matthias Zepper"
+date: "12/1/2021"
+output:
+  pdf_document: default
+  html_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+Solutions to the [Day 2 tasks of the Advent of code](https://adventofcode.com/2021/day/2)
+
+## Part 1
+
+*The submarine seems to already have a planned course (your puzzle input). You should probably figure out where it's going. Forward X increases the horizontal position by X units, down X increases the depth by X units, up X decreases the depth by X units.*
+
+*Calculate the horizontal position and depth you would have after following the planned course. What do you get if you multiply your final horizontal position by your final depth?*
+
+### Reading in the input data
+
+The hardest part of this question is actually to use `read.csv` correctly. Since default setting will use the first value as header of the column, it will be missing from the data unless `header=FALSE` is specified.
+
+```{r}
+course <- read.delim("day_2_input.txt",sep=" ",header=FALSE,col.names = c("direction","value"))
+print(head(course))
+```
+
+### Sum the values for the respective directions
+
+`aggregate` can apply a function like `sum` over one or multiple categorical variable(s). There are many more options to do solve tasks like this, e.g. several *Tidyverse* functions, but I try to stick with base R as much as possible for now.
+
+```{r}
+aggregated_course <- aggregate(value ~ direction, FUN=sum, data=course)
+print(aggregated_course)
+```
+
+Now turn into a named numeric vector to simplify access to the values:
+
+```{r}
+course_new <- setNames(aggregated_course[,"value"], aggregated_course[,"direction"])
+print(course_new)
+```
+
+And finally calculate the result
+
+```{r}
+course_new["forward"]*(course_new["down"]-course_new["up"])
+```
+
+## Part 2
+
+*Based on your calculations, the planned course doesn't seem to make any sense. You find the submarine manual and discover that the process is actually slightly more complicated. In addition to horizontal position and depth, you'll also need to track a third value, aim, which also starts at 0. The commands also mean something entirely different than you first thought:*
+
+*Down X increases your aim by X units. up X decreases your aim by X units. forward X does two things: It increases your horizontal position by X units. It increases your depth by your aim multiplied by X.*
+
+First, the *up* values should be negative to allow for an easier calculation of the aim:
+
+```{r}
+neg_index <- course[,"direction"]=="up"
+course[neg_index,"value"] <- course[neg_index,"value"]*-1
+```
+
+Then I will copy the value column, replacing all forward values with 0 to allow for an easy application of the cumulative sum function `cumsum`.
+
+```{r}
+course[,"aim"] <- course[,"value"] 
+fwd_index <- course[,"direction"]=="forward"
+course[fwd_index,"aim"] <- 0
+course[,"aim"] <- cumsum(course[,"aim"])
+```
+
+Thanks to `cumsum`, I know my current aim at every command, but only the forward commands do matter now:
+
+```{r}
+course[fwd_index,"depth"] <- course[fwd_index,"value"] * course[fwd_index,"aim"]
+```
+
+*What do you get if you multiply your final horizontal position by your final depth?*
+
+```{r}
+sum(course[fwd_index,"value"]) * sum(course[fwd_index,"depth"],na.rm=TRUE)
+```
