@@ -1,10 +1,10 @@
 ---
 title: "Advent of Code 2021 - Day 2"
 author: "Matthias Zepper"
-date: "12/1/2021"
+date: "12/2/2021"
 output:
-  pdf_document: default
   html_document: default
+  pdf_document: default
 ---
 
 ```{r setup, include=FALSE}
@@ -21,7 +21,7 @@ Solutions to the [Day 2 tasks of the Advent of code](https://adventofcode.com/20
 
 ### Reading in the input data
 
-The hardest part of this question is actually to use `read.csv` correctly. Since default setting will use the first value as header of the column, it will be missing from the data unless `header=FALSE` is specified.
+The hardest part of this question is actually to use `read.delim` correctly. Since default setting will use the first value as header of the column, it will be missing from the data unless `header=FALSE` is specified.
 
 ```{r}
 course <- read.delim("day_2_input.txt",sep=" ",header=FALSE,col.names = c("direction","value"))
